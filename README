@@ -1,0 +1,3 @@
+A tiny ruby rack application which exposes the data from puppet as JSON over HTTP.
+
+    rackup -p {port} web-puppet.ru
