@@ -10,5 +10,5 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
-  puppet
+  puppet (>= 2.7.0)
   rack

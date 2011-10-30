@@ -1,0 +1,6 @@
+#!/usr/bin/env ruby
+
+require 'rack'
+require 'web-puppet'
+
+Rack::Server.new(:app => WebPuppet::App.new, :Port => 9295, :daemonize => true).start
