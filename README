@@ -1,3 +1,19 @@
 A tiny ruby rack application which exposes the data from puppet as JSON over HTTP.
 
     gem install web-puppet
+
+Provides a simple command line tool which runs a built in web server. On accessing
+the specified port you should get a JSON response containing the current node information.
+
+    web-puppet --help
+    Usage: web-puppet [options] ...
+
+    Configuration options:
+            --no-daemonize               Don't daemonize the web server process
+        -p, --port PORT                  The port to run web-puppet on
+
+    Common options:
+        -h, --help                       Display this screen
+
+Note that in most setups the yaml directory containing the node information isn't readable
+by all users, so you may need to run this as puppet or root.
