@@ -4,7 +4,7 @@ require 'rack'
 require 'optparse'
 require 'web-puppet'
 
-options = {}
+options = {:daemonize => true, :port => 9295, :config => false}
 
 optparse = OptionParser.new do |opts|
   opts.banner = 'Usage: web-puppet [options] ...'
@@ -12,18 +12,17 @@ optparse = OptionParser.new do |opts|
   opts.separator ''
   opts.separator 'Configuration options:'
 
-  options[:daemonize] = true
   opts.on( '--no-daemonize', "Don't daemonize the web server process") do |username|
     options[:daemonize] = false
   end
 
-  options[:port] = 9295
   opts.on( '-p', '--port PORT', 'The port to run web-puppet on') do |port|
     options[:port] = port
   end
 
-  opts.separator ""
-  opts.separator "Common options:"
+  opts.on( '-c', '--config FILE', 'The file to load with configuration options') do |file|
+    options[:config] = file
+  end
 
   opts.on_tail('-h', '--help', 'Display this screen' ) do
     puts opts
@@ -33,9 +32,12 @@ end
 
 begin
   optparse.parse!
-  Rack::Server.new(:app => WebPuppet::App.new, :Port => options[:port], :daemonize => options[:daemonize]).start
+  WebPuppet::App.run!(options)
 rescue OptionParser::InvalidArgument, OptionParser::InvalidOption, OptionParser::MissingArgument
   puts $!.to_s
   puts optparse
+  exit
+rescue Errno::EACCES
+  puts $!.to_s
   exit
 end
