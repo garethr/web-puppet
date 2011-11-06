@@ -2,7 +2,7 @@ require "web-puppet/version"
 require 'rack'
 require 'puppet'
 require 'json'
-
+require 'parseconfig'
 
 module  WebPuppet
   class App
