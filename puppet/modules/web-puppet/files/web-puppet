@@ -3,6 +3,6 @@ author "Gareth Rushgrove"
 
 expect daemon
 
-env RUBY_BIN=/opt/ruby/bin
+env RUBY_BIN=/usr/bin
 
 exec $RUBY_BIN/web-puppet --config /etc/web-puppet.conf

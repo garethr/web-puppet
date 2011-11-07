@@ -1,7 +1,7 @@
 class webpuppet(
   $port = '9295',
-  $username = nil,
-  $password = nil
+  $username = false,
+  $password = false
 ) {
 
   package { "web-puppet":
@@ -15,7 +15,7 @@ class webpuppet(
     notify  => Service['web-puppet'],
   }
 
-  file { "/etc/init/web-puppet":
+  file { "/etc/init/web-puppet.conf":
     ensure  => present,
     source  => "puppet:///modules/web-puppet/web-puppet",
   }
@@ -25,7 +25,7 @@ class webpuppet(
     provider => upstart,
     require  => [
       Package["web-puppet"],
-      File["/etc/init/web-puppet"],
+      File["/etc/init/web-puppet.conf"],
     ]
   }
 
