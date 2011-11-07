@@ -19,7 +19,7 @@ Gem::Specification.new do |s|
   s.require_paths = ["lib"]
 
   s.add_runtime_dependency "rack"
-  s.add_runtime_dependency "puppet", ">= 2.7.0"
+  s.add_runtime_dependency "puppet", ">= 2.6.0"
   s.add_runtime_dependency "parseconfig"
 
   s.add_development_dependency "test-unit"
