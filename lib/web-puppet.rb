@@ -6,8 +6,12 @@ require 'parseconfig'
 
 module  WebPuppet
   class App
-    def call env
 
+    def initialize(filters=[])
+      @filters = filters
+    end
+
+    def call env
       Puppet[:config] = "/etc/puppet/puppet.conf"
       Puppet.parse_config
 
@@ -20,6 +24,10 @@ module  WebPuppet
       nodes.each do |n|
         facts = Puppet::Node::Facts.indirection.find(n.name)
         tags = Puppet::Resource::Catalog.indirection.find(n.name).tags
+        @filters.each do |filter|
+          facts.values.delete(filter.strip)
+        end
+
         data[n.name] = {
           :facts => facts.values,
           :tags => tags
@@ -44,13 +52,19 @@ module  WebPuppet
     end
 
     def self.run!(options)
-      application = self.new
+
+      conf = options[:config] ? ParseConfig.new(options[:config]) : false
+
+      if conf && conf.get_value('filters')
+        application = self.new(conf.get_value('filters').split(','))
+      else
+        application = self.new
+      end
 
       daemonize = options[:daemonize]
       port = options[:port]
 
-      if options[:config]
-        conf = ParseConfig.new(options[:config])
+      if conf
         application = application.add_auth(conf) if conf.get_value('password')
         daemonize = conf.get_value('daemonize') ? conf.get_value('daemonize') == "true" : daemonize
         port = conf.get_value('port') ? conf.get_value('port') : port
