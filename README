@@ -2,15 +2,14 @@ A tiny ruby rack application which exposes the data from puppet as JSON over HTT
 
     gem install web-puppet
 
-Provides a simple command line tool which runs a built in web server. On accessing
-the specified port you should get a JSON response containing the current node information.
+Provides a simple command line tool which runs a built in web server. On accessing the specified port you should get a JSON response containing the current node information.
 
     web-puppet --help
     Usage: web-puppet [options] ...
 
     Configuration options:
             --no-daemonize               Don't daemonize the web server process
-        -p, --port PORT                  The port to run web-facter on
+        -p, --port PORT                  The port to run web-puppet on
         -c, --config FILE                The file to load with configuration options
         -h, --help                       Display this screenp
 
@@ -24,6 +23,13 @@ specifying the filename with the --config option above.
     password=george
     port=3009
     daemonize=true
+    filters="ec2_public_keys_0_openssh_key, ec2_userdata, sshdsakey, sshrsakey"
 
-Note that the port and daemonize options will override those on the command line.
-The username and password options enable HTTP basic authentication using those details.
+Note that the port and daemonize options will override those on the command line. The username and password options enable HTTP basic authentication using details specified.
+
+The filters option will remove sensitive items from the output, you can specify any keys you like and they'll be remove automatically.
+
+If you're using puppet to manage your puppetmaster then the provided puppet module might be of use. Include in your puppet module diretory and modify as needed. You can use like so:
+
+    import "web-puppet"
+    class { "webpuppet": username => "username", password => "password" }
