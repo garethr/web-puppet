@@ -11,7 +11,7 @@ module  WebPuppet
       Puppet[:config] = "/etc/puppet/puppet.conf"
       Puppet.parse_config
 
-      Puppet[:clientyamldir] = "$yamldir"
+      Puppet[:clientyamldir] = Puppet[:yamldir]
       Puppet::Node.indirection.terminus_class = :yaml
 
       nodes = Puppet::Node.indirection.search("*")
